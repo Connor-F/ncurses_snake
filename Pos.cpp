@@ -1,5 +1,10 @@
 #include "Pos.h"
 
+bool Pos::operator!=(const Pos& input)
+{
+    return (input.get_x_pos() != x || input.get_y_pos() != y);
+}
+
 bool Pos::operator==(const Pos& input)
 {
     return (input.get_x_pos() == x && input.get_y_pos() == y);

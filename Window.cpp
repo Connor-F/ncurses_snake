@@ -46,9 +46,9 @@ Food Window::create_food()
 {
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
-    std::uniform_int_distribution<> distrx(1, max_x - 1); // define the range
+    std::uniform_int_distribution<> distrx(2, max_x - 2); // define the range
     int x = distrx(eng);
-    std::uniform_int_distribution<> distry(1, max_y - 1); // define the range
+    std::uniform_int_distribution<> distry(2, max_y - 2); // define the range
     int y = distry(eng);
 
     return Food(Pos(x, y));
@@ -75,7 +75,7 @@ void Window::start_game()
     food.push_back(create_food()); // initial piece of food
 
     bool dead = false;
-    while(!dead)
+    while(!dead) // game loop
     {
         char input = getch();
         if(input != ERR) // user pressed something
@@ -172,15 +172,22 @@ void Window::handle_input(char input)
  */
 void Window::update_directions()
 {
-    //                                                          + 1 to skip head
-    for(std::vector<Snake_Segment>::iterator it = snake.get_segments().begin(); it != snake.get_segments().end(); it++)
+    // todo: here is problem
+    // start from back
+    std::vector<Snake_Segment>::size_type curr, next;
+    for(curr = 0, next = 1; curr < snake.get_segments().size(); curr++, next++)
     {
-        if(snake.get_front() == *it) 
-            continue;
-        Snake_Segment previous = it[-1];
-        Snake_Segment current = *it;
-        // make the segment follow the previous segment direction
-        current.set_direction(previous.get_direction());
+        if(next >= snake.get_segments().size()) // no more next segments to use
+            next = curr; // must be at tail then
+
+        Snake_Segment curr_segment = snake.get_segments().at(curr);
+        Snake_Segment next_segment = snake.get_segments().at(next);
+
+        // change this segments direction to the one ahead of it
+        if(snake.get_segments().size() == 2) // todo: remove
+            curr_segment.set_direction(next_segment.get_direction());
+        else
+            curr_segment.set_direction(next_segment.get_direction());
     }
 }
 

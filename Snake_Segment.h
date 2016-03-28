@@ -32,6 +32,7 @@ class Snake_Segment
         int get_direction();
 
         bool operator==(const Snake_Segment&);
+        bool operator!=(const Snake_Segment&);
 };
 
 #endif

@@ -1,5 +1,10 @@
 #include "Snake_Segment.h"
 
+bool Snake_Segment::operator!=(const Snake_Segment& input)
+{
+    return position != input.get_pos();
+}
+
 bool Snake_Segment::operator==(const Snake_Segment& input)
 {
     return position == input.get_pos();

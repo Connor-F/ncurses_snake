@@ -95,6 +95,7 @@ bool Snake::has_hit_self()
         int x_seg = it->get_pos().get_x_pos();
         int y_seg = it->get_pos().get_y_pos();
 
+        //todo: if(pos == pos) here, not x and y
         if(x_head == x_seg && y_head == y_seg) // head collided with a body segment
             return true;
     }
