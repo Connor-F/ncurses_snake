@@ -11,6 +11,7 @@ class Pos
     public:
         Pos(int x_pos, int y_pos) : x(x_pos), y(y_pos) { }
 
+        bool operator==(const Pos&);
         const Pos get_pos() const;
         const int get_x_pos() const;
         const int get_y_pos() const;

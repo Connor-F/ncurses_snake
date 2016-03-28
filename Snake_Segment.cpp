@@ -1,5 +1,10 @@
 #include "Snake_Segment.h"
 
+bool Snake_Segment::operator==(const Snake_Segment& input)
+{
+    return position == input.get_pos();
+}
+
 /*
  * allows the snake to be drawn with defined icon
  * return: string contaning the icon used for parts of the snake

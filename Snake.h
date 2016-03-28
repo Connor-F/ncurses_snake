@@ -18,11 +18,11 @@ class Snake
         Snake_Segment& get_front();
         const Snake_Segment& get_back();
         std::vector<Snake_Segment>& get_segments();
-        void add_to_back(Snake_Segment);
+        void grow();
+        void go();
 
         bool has_hit_wall();
         bool has_hit_self();
-        bool is_on_food();
         bool has_died();
 };
 

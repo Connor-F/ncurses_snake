@@ -15,6 +15,30 @@ void Window::draw_game_frame()
 }
 
 /*
+ * checks if the snake head is on a piece of Food (therefore eating it aka removing it from the food vector)
+ * return: true if it is, false if not
+ */
+bool Window::is_on_food()
+{
+    Snake_Segment head = snake.get_front();
+    int x_head = head.get_pos().get_x_pos();
+    int y_head = head.get_pos().get_y_pos();
+    for(std::vector<Food>::const_iterator it = food.begin(); it != food.end(); it++)
+    {
+        int x_food = it->get_pos().get_x_pos();
+        int y_food = it->get_pos().get_y_pos();
+
+        if(x_head == x_food && y_head == y_food) // eaten a piece of food!
+        {
+            food.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*
  * used to spawn a new piece of Food onto the screen
  * return: a new Food object that the snake can eat
  */
@@ -47,7 +71,7 @@ void Window::start_ncurses()
 void Window::start_game()
 {
     start_ncurses();
-    snake.add_to_back(Snake_Segment(Pos(max_x / 2, max_y / 2), NORTH)); // start in middle
+    snake.go(); // start snake off
     food.push_back(create_food()); // initial piece of food
 
     bool dead = false;
@@ -57,9 +81,16 @@ void Window::start_game()
         if(input != ERR) // user pressed something
             handle_input(input);
 
-        draw_screen();
+        if(is_on_food())
+        {
+            snake.grow();
+            food.push_back(create_food()); // create new food
+        }
+
         if(snake.has_died())
             dead = true;
+
+        draw_screen();
     }
 
     Game_Manager::game_over();
@@ -130,6 +161,26 @@ void Window::handle_input(char input)
         case 'D':
             snake.get_front().set_direction(EAST);
             break;
+    }
+
+    update_directions();
+}
+
+/*
+ * used to update the direction of every segment, needed as the
+ * snake can turn so at some point other segments will need to turn
+ */
+void Window::update_directions()
+{
+    //                                                          + 1 to skip head
+    for(std::vector<Snake_Segment>::iterator it = snake.get_segments().begin(); it != snake.get_segments().end(); it++)
+    {
+        if(snake.get_front() == *it) 
+            continue;
+        Snake_Segment previous = it[-1];
+        Snake_Segment current = *it;
+        // make the segment follow the previous segment direction
+        current.set_direction(previous.get_direction());
     }
 }
 

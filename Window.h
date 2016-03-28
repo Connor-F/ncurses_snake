@@ -28,7 +28,10 @@ class Window
         void draw_food();
         void draw_snake();
         void draw_screen();
+        void update_directions();
+
         Food create_food();
+        bool is_on_food();
 
         void handle_input(char);
 

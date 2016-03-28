@@ -22,13 +22,41 @@ const Snake_Segment& Snake::get_back()
 }
 
 /*
- * allows user to add a new Snake_Segment to the back
- * of the snake (called after snake has eaten a piece of food)
- * param: seg: the Snake_Segment to add to the back
+ * creates the intial snake
  */
-void Snake::add_to_back(const Snake_Segment seg)
+void Snake::go()
 {
-    snake.push_back(seg);
+    snake.push_back(Snake_Segment(Pos(Window::max_x / 2, Window::max_y / 2), NORTH));
+}
+
+/*
+ * allows snake to grow after eating some food
+ */
+void Snake::grow()
+{
+    Snake_Segment last = get_back();
+    int new_x = last.get_pos().get_x_pos();
+    int new_y = last.get_pos().get_y_pos();
+
+    // works out new coords for the new segment according to the
+    // tail of the snake (as new segment gets added after tail)
+    switch(last.get_direction())
+    {
+        case NORTH:
+            new_y++;
+            break;
+        case EAST:
+            new_x--;
+            break;
+        case SOUTH:
+            new_y--;
+            break;
+        case WEST:
+            new_x++;
+            break;
+    }
+
+    snake.push_back(Snake_Segment(Pos(new_x, new_y), last.get_direction()));
 }
 
 /*
@@ -71,15 +99,6 @@ bool Snake::has_hit_self()
             return true;
     }
 
-    return false;
-}
-
-/*
- * checks if the snake head is on a piece of Food (therefore eating it)
- * return: true if it is, false if not
- */
-bool Snake::is_on_food()
-{
     return false;
 }
 

@@ -30,6 +30,8 @@ class Snake_Segment
         void set_pos(Pos);
         void set_direction(int);
         int get_direction();
+
+        bool operator==(const Snake_Segment&);
 };
 
 #endif
