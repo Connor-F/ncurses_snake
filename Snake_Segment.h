@@ -26,7 +26,9 @@ class Snake_Segment
         Snake_Segment(Pos pos, int dir) : position(pos), direction(dir), segment_icon("o") { }
 
         const std::string& get_segment_icon() const;
-        const Pos get_pos() const;
+        void set_segment_icon(std::string); // todo: remove
+
+        Pos get_pos() const;
         void set_pos(Pos);
         void set_direction(int);
         int get_direction();

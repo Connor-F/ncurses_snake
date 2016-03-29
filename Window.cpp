@@ -1,4 +1,8 @@
 #include <random>
+#include <iterator>
+#include <algorithm>
+
+#include <unistd.h>
 
 #include "Window.h"
 #include "Game_Manager.h"
@@ -28,6 +32,7 @@ bool Window::is_on_food()
         int x_food = it->get_pos().get_x_pos();
         int y_food = it->get_pos().get_y_pos();
 
+        //todo: use Pos == Pos
         if(x_head == x_food && y_head == y_food) // eaten a piece of food!
         {
             food.erase(it);
@@ -81,6 +86,7 @@ void Window::start_game()
         if(input != ERR) // user pressed something
             handle_input(input);
 
+        update_directions();
         if(is_on_food())
         {
             snake.grow();
@@ -116,6 +122,16 @@ void Window::draw_snake()
         x = it->get_pos().get_x_pos();
         y = it->get_pos().get_y_pos();
         mvprintw(y, x, "%s", it->get_segment_icon().c_str()); // draw segment to screen
+
+
+        if(snake.get_segments().size() > 1)
+        {
+        printw(" draw_snake(): has dir=%d   ", it->get_direction());
+        refresh();
+        sleep(1);
+        }
+
+
 
         // after drawing the snake segment, we advance it one cell in the correct
         // direction (depends on the direction of the segment ahead of it)
@@ -162,8 +178,6 @@ void Window::handle_input(char input)
             snake.get_front().set_direction(EAST);
             break;
     }
-
-    update_directions();
 }
 
 /*
@@ -173,21 +187,27 @@ void Window::handle_input(char input)
 void Window::update_directions()
 {
     // todo: here is problem
-    // start from back
+    std::vector<Snake_Segment> segments_copy;
+    std::copy(snake.get_segments().begin(), snake.get_segments().end(), back_inserter(segments_copy));
+
     std::vector<Snake_Segment>::size_type curr, next;
     for(curr = 0, next = 1; curr < snake.get_segments().size(); curr++, next++)
     {
-        if(next >= snake.get_segments().size()) // no more next segments to use
-            next = curr; // must be at tail then
+        if(next >= snake.get_segments().size()) // no more next segments to use (at tail)
+            return;
 
-        Snake_Segment curr_segment = snake.get_segments().at(curr);
-        Snake_Segment next_segment = snake.get_segments().at(next);
+        Snake_Segment curr_segment = snake.get_segment(curr);
+        Snake_Segment next_segment = snake.get_segment(next);
 
         // change this segments direction to the one ahead of it
-        if(snake.get_segments().size() == 2) // todo: remove
-            curr_segment.set_direction(next_segment.get_direction());
-        else
-            curr_segment.set_direction(next_segment.get_direction());
+        //next_segment.set_direction(curr_segment.get_direction());
+        printw("bef: currd=%d nextd=%d x=%d y=%d ", curr_segment.get_direction(), next_segment.get_direction(), next_segment.get_pos().get_x_pos(), next_segment.get_pos().get_y_pos());
+        refresh();
+        sleep(3);
+        next_segment.set_direction(segments_copy.at(curr).get_direction());
+        printw("aft: currd=%d nextd=%d x=%d y=%d ", curr_segment.get_direction(), next_segment.get_direction(), next_segment.get_pos().get_x_pos(), next_segment.get_pos().get_y_pos());
+        refresh();
+        sleep(3);
     }
 }
 

@@ -18,6 +18,9 @@ class Snake
         Snake_Segment& get_front();
         const Snake_Segment& get_back();
         std::vector<Snake_Segment>& get_segments();
+
+        Snake_Segment& get_segment(std::vector<Snake_Segment>::size_type); // todo: remove?
+
         void grow();
         void go();
 

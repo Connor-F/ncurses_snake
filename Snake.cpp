@@ -1,6 +1,11 @@
 #include "Snake.h"
 #include "Window.h"
 
+Snake_Segment& Snake::get_segment(std::vector<Snake_Segment>::size_type index) // todo: remove?
+{
+    return snake.at(index);
+}
+
 /*
  * allows user to get the front (head) 
  * of the snake

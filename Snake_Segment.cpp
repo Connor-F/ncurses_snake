@@ -1,5 +1,14 @@
 #include "Snake_Segment.h"
 
+#include <ncurses.h> //todo: remove both
+#include <unistd.h>
+
+// todo: remove
+void Snake_Segment::set_segment_icon(std::string input)
+{
+    segment_icon = input;
+}
+
 bool Snake_Segment::operator!=(const Snake_Segment& input)
 {
     return position != input.get_pos();
@@ -23,7 +32,7 @@ const std::string& Snake_Segment::get_segment_icon() const
  * allows retrieval of Pos of current segment
  * return: Pos of this segment
  */
-const Pos Snake_Segment::get_pos() const
+Pos Snake_Segment::get_pos() const
 {
     return position;
 }
@@ -34,7 +43,13 @@ const Pos Snake_Segment::get_pos() const
  */
 void Snake_Segment::set_direction(int dir)
 {
+    /*printw("dir before:%d   dir recvd:%d  ", direction, dir);
+    refresh();
+    sleep(3);*/
     direction = dir;
+    /*printw("dir after:%d  ", direction);
+    refresh();
+    sleep(3);*/
 }
 
 /*
